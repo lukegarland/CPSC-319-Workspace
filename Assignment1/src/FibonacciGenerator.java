@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+import java.util.Arrays;
 /**
  * 			FibonacciGenerator.java
  * Author: 	@author lukeg
@@ -11,7 +11,7 @@ public class FibonacciGenerator {
 
 	private ArrayList<Long>memoCache = new ArrayList<Long>();
 
-	private long[] dynamicArray = new long[1000000];
+	private long[] dynamicArray = new long[30000000];
 	
 	private long [][] FM = new long[2][2];
 	
@@ -140,66 +140,66 @@ public class FibonacciGenerator {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		final int numberOfCalls = 3;
+		final int numberOfCalls = 500;
+		long [] results = new long[5];
 		
 		FibonacciGenerator generate = new FibonacciGenerator();
-		System.out.println("n          fibRec(n)          fibMem(n)          fibDyn(n)          fibIter(n)          fibMat(n)");
-		System.out.println("-------------------------------------------------------------------------------------------------");
+		System.out.println("n          fibRec(n)\t          fibMem(n)\t          fibDyn(n)\t          fibIter(n)\t          fibMat(n)");
+		System.out.println("-----------------------------------------------------------------------------------------------------------------");
 		long timeStart, timeEnd;
 		
-		for(int i = 1; i< 1000000; )
+		for(int i = 1; i< 30000000; )
 		{
-			System.out.printf("%-7d\t",i);
-			if(i<43)
-			{
-				timeStart = System.nanoTime();
-				for (int j = 0; j< numberOfCalls; j++)
-					generate.fibRec(i);
-				timeEnd = System.nanoTime();
-				System.out.printf("%10d\t", (timeEnd - timeStart)/numberOfCalls);
-			}
-			else
-			{
-				System.out.printf("%10d\t", 0);
-			}
-			
-			if(i <= 6400)
-			{
-				timeStart = System.nanoTime();
-				for (int j = 0; j< numberOfCalls; j++)
-					generate.fibMem(i);
-				
-				timeEnd = System.nanoTime();
-				System.out.printf("%16d\t", (timeEnd - timeStart)/numberOfCalls);			
-			}else
-				System.out.printf("%16d\t", 0);
+			Arrays.fill(results, 0);
+			System.out.printf("%-8d\t",i);
 
-			timeStart = System.nanoTime();
-			for (int j = 0; j< numberOfCalls; j++)
+			for (int j = 0; j < numberOfCalls; j++)
+			{
+				if(i<30)
+				{
+					timeStart = System.nanoTime();
+					generate.fibRec(i);
+					timeEnd = System.nanoTime();
+					results[0] += timeEnd - timeStart;
+				}
+				
+				if(i <= 6400)
+				{
+					timeStart = System.nanoTime();
+					generate.fibMem(i);
+					timeEnd = System.nanoTime();
+					results[1] += timeEnd - timeStart;
+				}
+
+				timeStart = System.nanoTime();
 				generate.fibDyn(i);
-			timeEnd = System.nanoTime();
-			System.out.printf("%16d\t", (timeEnd - timeStart)/numberOfCalls);
-			
-			timeStart = System.nanoTime();
-			for (int j = 0; j< numberOfCalls; j++)
+				timeEnd = System.nanoTime();
+				results[2] += timeEnd - timeStart;
+
+				timeStart = System.nanoTime();
 				generate.fibIter(i);
-			timeEnd = System.nanoTime();
-			System.out.printf("%16d\t", (timeEnd - timeStart)/numberOfCalls);
-			
-			timeStart = System.nanoTime();
-			for (int j = 0; j< numberOfCalls; j++)
+				timeEnd = System.nanoTime();
+				results[3] += timeEnd - timeStart;
+
+				timeStart = System.nanoTime();
 				generate.fibMat(i);
-			timeEnd = System.nanoTime();
-			System.out.printf("%16d\t", (timeEnd - timeStart)/numberOfCalls);
+				timeEnd = System.nanoTime();
+				results[4] += timeEnd - timeStart;
+			}
 			
+			System.out.printf("%10d\t", results[0]/numberOfCalls);
+			System.out.printf("%16d\t", results[1]/numberOfCalls);
+			System.out.printf("%16d\t", results[2]/numberOfCalls);
+			System.out.printf("%16d\t", results[3]/numberOfCalls);
+			System.out.printf("%16d\t", results[4]/numberOfCalls);
+
 			System.out.println();
-			if(i<45)
+			if(i<40)
 				i++;
 			else if (i<100)
-				i+=5;
+				i+=10;
 			else
-				i*=2;
-				
+				i*=2;	
 		}
 //		generate.testFibRec();
 //		
