@@ -9,49 +9,65 @@ import java.util.Arrays;
 
 public class FibonacciGenerator {
 
-	private ArrayList<Long>memoCache = new ArrayList<Long>();
 
-	private long[] dynamicArray = new long[30000000];
 	
-	private long [][] FM = new long[2][2];
 	
 	public FibonacciGenerator()
 	{
-		memoCache.add((long) 0);
-		memoCache.add((long) 1);
-		
-		dynamicArray[0] = 0L;
-		dynamicArray[1] = 1L;
+
+
 	}
 	
-	public long fibRec(int n)
+	public static long fibRec(int n)
 	{
 		if (n == 0 )
 			return 0;
 		else if (n == 1)
 			return 1;
 		else
-			return this.fibRec(n - 1) + this.fibRec(n - 2);		
+			return fibRec(n - 1) + fibRec(n - 2);		
 	}
 
 	
-	public long fibMem(int n)
+	public static long fibMem(int n)
 	{
-		if(n <= this.memoCache.size() - 1 )
+		ArrayList<Long>memoCache = new ArrayList<Long>();
+		memoCache.add((long) 0);
+		memoCache.add((long) 1);
+		
+		if(n <= memoCache.size() - 1 )
 		{
 			return memoCache.get(n);
 		}
 		else 
 		{
-			long value = this.fibMem(n - 1) + this.fibMem(n - 2);
-			this.memoCache.add(value);
+			long value = fibMem(n - 1,memoCache) + fibMem(n - 2, memoCache);
+			memoCache.add(value);
+			return value;	
+		}
+	}
+	private static long fibMem(int n, ArrayList<Long> cache)
+	{
+
+		if(n <= cache.size() - 1 )
+		{
+			return cache.get(n);
+		}
+		else 
+		{
+			long value = fibMem(n - 1, cache) + fibMem(n - 2, cache);
+			cache.add(value);
 			return value;	
 		}
 	}
 
 	
-	public long fibDyn(int n)
+	public static long fibDyn(int n)
 	{
+		long[] dynamicArray = new long[n+2];
+		dynamicArray[0] = 0L;
+		dynamicArray[1] = 1L;
+		
 		assert n < dynamicArray.length;
 		
 		long value = 0;
@@ -61,15 +77,15 @@ public class FibonacciGenerator {
 		{	
 			for(int i = 2; i <= n; i++)
 			{
-				value = dynamicArray[n - 1] + dynamicArray[n - 2];
-				dynamicArray[n] = value;
+				value = dynamicArray[i - 1] + dynamicArray[i - 2];
+				dynamicArray[i] = value;
 			}
 		}
 		return value;
 	}
 
 	
-	public long fibIter(int n)
+	public static long fibIter(int n)
 	{
 		long n_1 = 1;
 		long n_2 = 0;
@@ -92,27 +108,28 @@ public class FibonacciGenerator {
 	}
 	
 	
-	public long fibMat(int n)
+	public static long fibMat(int n)
 	{
 		if(n == 0)
 			return 0;
-		
+		long [][] FM = new long[2][2];
+
 		// Initialize FM
 		FM[0][0] = 1;
 		FM[0][1] = 1;
 		FM[1][0] = 1;
 		FM[1][1] = 0;
 		
-		this.matrixPower(n-1);
+		matrixPower(n-1, FM);
 		
 		return FM[0][0];		
 	}
 	
-	private void matrixPower(int n)
+	private static void matrixPower(int n,long[][] FM )
 	{
 		if(n > 1)
 		{
-			this.matrixPower(n/2);
+			matrixPower(n/2, FM);
 			
 			//FM = FM * FM 
 			long a = FM[0][0] * FM[0][0]  + FM[0][1] * FM[1][0];
@@ -140,51 +157,45 @@ public class FibonacciGenerator {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		final int numberOfCalls = 500;
+		final int numberOfCalls = 100;
 		long [] results = new long[5];
 		
-		FibonacciGenerator generate = new FibonacciGenerator();
 		System.out.println("n          fibRec(n)\t          fibMem(n)\t          fibDyn(n)\t          fibIter(n)\t          fibMat(n)");
 		System.out.println("-----------------------------------------------------------------------------------------------------------------");
-		long timeStart, timeEnd;
+		long timeStart;
 		
-		for(int i = 1; i< 30000000; )
+		for(int i = 0; i< 30000000; )
 		{
 			Arrays.fill(results, 0);
 			System.out.printf("%-8d\t",i);
 
 			for (int j = 0; j < numberOfCalls; j++)
 			{
-				if(i<30)
+				if(i<=30)
 				{
 					timeStart = System.nanoTime();
-					generate.fibRec(i);
-					timeEnd = System.nanoTime();
-					results[0] += timeEnd - timeStart;
+					fibRec(i);
+					results[0] += System.nanoTime() - timeStart;
 				}
 				
 				if(i <= 6400)
 				{
 					timeStart = System.nanoTime();
-					generate.fibMem(i);
-					timeEnd = System.nanoTime();
-					results[1] += timeEnd - timeStart;
+					fibMem(i);
+					results[1] += System.nanoTime() - timeStart;
 				}
 
 				timeStart = System.nanoTime();
-				generate.fibDyn(i);
-				timeEnd = System.nanoTime();
-				results[2] += timeEnd - timeStart;
+				fibDyn(i);
+				results[2] += System.nanoTime() - timeStart;
 
 				timeStart = System.nanoTime();
-				generate.fibIter(i);
-				timeEnd = System.nanoTime();
-				results[3] += timeEnd - timeStart;
+				fibIter(i);
+				results[3] += System.nanoTime() - timeStart;
 
 				timeStart = System.nanoTime();
-				generate.fibMat(i);
-				timeEnd = System.nanoTime();
-				results[4] += timeEnd - timeStart;
+				fibMat(i);
+				results[4] += System.nanoTime() - timeStart;
 			}
 			
 			System.out.printf("%10d\t", results[0]/numberOfCalls);
@@ -198,74 +209,79 @@ public class FibonacciGenerator {
 				i++;
 			else if (i<100)
 				i+=10;
+			else if (i <= 6400)
+				i *= 2;
+			else if(i == 12800)
+				i = 100000;
 			else
-				i*=2;	
+				i+=1000000;	
 		}
-//		generate.testFibRec();
+		
+//		testFibRec();
 //		
-//		generate.testFibMem();
+//		testFibMem();
 //		
-//		generate.testfibDyn();
+//		testfibDyn();
 //		
-//		generate.testFibIter();
+//		testFibIter();
 //		
-//		generate.testFibMat();
+		testFibMat();
 //		
 	}
 	
-	private void testFibRec()
+	private static void testFibRec()
 	{
 		System.out.println("n       fib(n)");
 		System.out.println("--------------");
 
 		for (int i = 0; i < 45; i++)
 		{
-			System.out.printf("%-8d%d\n", i, this.fibRec(i));
+			System.out.printf("%-8d%d\n", i, fibRec(i));
 		}
 	}
 	
-	private void testFibMem()
+	private static void testFibMem()
 	{
 		System.out.println("\nn       fib(n)");
 		System.out.println("--------------");
 		
 		for (int i = 0; i < 100; i++)
 		{
-			System.out.printf("%-8d%d\n", i, this.fibMem(i));
+			System.out.printf("%-8d%d\n", i, fibMem(i));
 		}
 		
 	}
 	
-	private void testfibDyn()
+	private static void testfibDyn()
 	{
 		System.out.println("\nn       fib(n)");
 		System.out.println("--------------");
 		
-		for (int i = 0; i < 100; i++)
+		for (int i = 0; i < 45; i++)
 		{
-			System.out.printf("%-8d%d\n", i, this.fibDyn(i));
+			System.out.printf("%-8d%d\n", i, fibDyn(i));
 		}
 	}
 	
-	private void testFibIter()
+	private static void testFibIter()
 	{
 		System.out.println("n       fib(n)");
 		System.out.println("--------------");
 
 		for (int i = 0; i < 100; i++)
 		{
-			System.out.printf("%-8d%d\n", i, this.fibIter(i));
+			System.out.printf("%-8d%d\n", i, fibIter(i));
 		}
 	}
 	
-	private void testFibMat()
+	private static void testFibMat()
 	{
 		System.out.println("n       fib(n)");
 		System.out.println("--------------");
 
 		for (int i = 0; i < 100; i++)
 		{
-			System.out.printf("%-8d%d\n", i, this.fibMat(i));
+			System.out.printf("%-8d%d\n", i, fibMat(i));
 		}
 	}
 	
