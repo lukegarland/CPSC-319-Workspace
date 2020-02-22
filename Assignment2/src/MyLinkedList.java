@@ -1,7 +1,10 @@
 /**
- * 			MyLinkedList.java
+ * 
+ * 			Simple Linked List class with basic add, get and set functionality.
+ * 
+ * 			
  * 			@author lukeg
- * 			@param <K>
+ * 			@param <K> Type of Object to store
  * 			@since	Feb. 21, 2020
  * 
  */
@@ -20,8 +23,10 @@ public class MyLinkedList<K> {
 		 */
 		public Node nextNode;
 	}
+	
+	
 	/**
-	 * First (Head) node in the list
+	 * First node in the list
 	 */
 	private Node headNode;
 	
@@ -128,99 +133,10 @@ public class MyLinkedList<K> {
 		size++;
 	}
 	
-	
-	/**
-	 * Inserts itemA at index n of the list.
-	 * @param itemA data to insert
-	 * @param n index of itemA
-	 */
-	public void insert(K itemA, int n)
-	{
-		if(n < 0 || n > size)
-	        return;
-	    else if(n == 0)
-	        pushFront(itemA);
-	    else if(n == size) 
-	        pushBack(itemA);
-	    else
-	    {
-	    	Node newNode = new Node();
-	    	newNode.item = itemA;
-	    	
-	    	Node before = headNode;
-	    	Node after = headNode.nextNode;
-	    	int i = 1;
-	    	while (i<n)
-	    	{
-	    	     before = after;
-		         after = after.nextNode;
-		         i++;
-	    	}
 
-	    	newNode.nextNode = after;
-	    	before.nextNode = newNode;
-	    	size++;
-	    	
-		    
-	    }
-	}
-	
-	
-	/**
-	 * Clears the entire list
-	 */
-	public void clear()
-	{
-	    Node p = headNode;
-	    
-	    while(p != null)
-	    {
-	        headNode = headNode.nextNode;
-	        //p = null; 
-	        p = headNode;
-	    }
-
-	    headNode = null;
-	    size = 0;
-	}
-
-	/**
-	 * Remove item at index n from the list. Length of list will be one item shorter
-	 * @param n index to delete
-	 */
-	public void remove(int n)
-	{
-	    if (headNode == null || n < 0 || n >= size)
-	    	return;
-	    
-	    Node beDeleted;
-	    Node before;
-	    if(n == 0)
-	    {
-	    	beDeleted = headNode;
-	    	headNode = headNode.nextNode;
-	    }
-	    else
-	    {
-	    	before = headNode;
-	    	beDeleted = before.nextNode;
-	    	int i = 1;
-	    	while (i<n)
-	    	{
-	    		before = beDeleted;
-	    		beDeleted = before.nextNode;
-	    		i++;
-	    	}
-	    	before.nextNode = beDeleted.nextNode;
-	    }
-	    beDeleted = null;
-	    size--;
-	    
-	}
-
-	
 	/**
 	 * Prints the items (in order) in the list
+	 * @param <K> Stored Object type
 	 * @param list list to print to System.out
 	 */
 	public static <K> void print(MyLinkedList<K> list)
