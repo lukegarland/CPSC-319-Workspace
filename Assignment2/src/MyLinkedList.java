@@ -9,7 +9,7 @@
  * 
  */
 
-public class MyLinkedList<K> {
+public class MyLinkedList<K extends Comparable<K>>{
 
 	private class Node
 	{
@@ -43,7 +43,10 @@ public class MyLinkedList<K> {
 	{
 	}
 	
-	public int size() {return size;}
+	public int size() 
+	{
+		return size;
+		}
 	
 
 	/**
@@ -139,9 +142,29 @@ public class MyLinkedList<K> {
 	 * @param <K> Stored Object type
 	 * @param list list to print to System.out
 	 */
-	public static <K> void print(MyLinkedList<K> list)
+	@Override
+	public String toString()
 	{
-	    for(int i = 0; i < list.size(); i++)
-	        System.out.print(list.get(i) + "  ");
+		StringBuilder sb = new StringBuilder();
+		
+	    for(int i = 0; i < this.size(); i++)
+	        sb.append(this.get(i) + "  ");
+	    
+	    return sb.toString();
+	}
+	
+	
+	
+	public boolean contains(K key)
+	{
+		for(int i = 0; i < size(); i++)
+		{
+			if(get(i).compareTo(key) == 0)
+				return true;
+		}
+		
+		
+		return false;
+				
 	}
 }

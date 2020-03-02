@@ -88,8 +88,7 @@ public class CPSC319W20A2 {
 		// Print all contents of listB
 		for(int i = 0; i<listB.size(); i++)
 		{
-			MyLinkedList.print(listB.get(i));
-			System.out.println();
+			System.out.println(listB.get(i).toString());
 		}
 			
 		
@@ -120,32 +119,28 @@ public class CPSC319W20A2 {
 	}
 	
 	
-	private static void mergeSort(String[] S)
-	{
-		mergeSort(S, 0, S.length);
-	}
-	
+
 	/**
 	 * Merge sort algorithm for Strings.
 	 * Used to sort an array of strings. Strings are sorted in lexicographical (letter case is ignored).
 	 * @param S
 	 */
-	private static void mergeSort(String[] S, int start, int end)
+	private static void mergeSort(String[] S)
 	{
-		int n = end - start;
+		int n = S.length;
 		if(n<2)		// trivial case
 			return;
 		// divide
 		
-		int mid = (start+end)/2;
-
-
-		mergeSort(S, start, mid);
-		mergeSort(S, mid, end);
+		int mid = n/2;
 		
-
+		String[] S1 = Arrays.copyOfRange(S, 0, mid);
+		String[] S2 = Arrays.copyOfRange(S, mid, n);
 		
-		merge(S, start, mid, end);
+		mergeSort(S1);
+		mergeSort(S2);
+		
+		merge(S1, S2, S);
 		
 	}
 
@@ -158,49 +153,16 @@ public class CPSC319W20A2 {
 	 * @param S2 String 2
 	 * @param S String to be overwritten
 	 */
-	private static  void merge(String[] S, int start, int mid, int end) 
+	private static  void merge(String[] S1, String[] S2, String[] S) 
 	{
-		
-		
-		
-		String[] leftSide = Arrays.copyOfRange(S, start, mid);
-		String[] rightSide = Arrays.copyOfRange(S, mid, end);
-		
-
 		int i = 0, j = 0;
-		
-		int SIndex = start;
-		
-		
-		while(i< (mid - start) && j < (end - mid))
+		while (i+j < S.length)
 		{
-			if(leftSide[i].compareTo(rightSide[j]) < 0)
-				S[SIndex] = leftSide[i++];
-			
+			if( j == S2.length || (i<S1.length && (S1[i].compareToIgnoreCase((S2[j])) < 0)))
+				S[i+j] = S1[i++];
 			else
-				S[SIndex] = rightSide[j++];
-			
-			SIndex++;
+				S[i+j] = S2[j++];
 		}
-		
-		while (i < (mid-start))
-		{
-			S[SIndex++] = leftSide[i++];
-		}
-		
-		while (j < (end - mid))
-		{
-			S[SIndex++] = leftSide[j++];
-		}
-		
-		
-//		while (i+j < S.length && i < S1.length && j < S2.length)
-//		{
-//			if( j == S2.length || (i<S1.length && (S1[i].compareToIgnoreCase((S2[j])) < 0)))
-//				S[i+j] = S1[i++];
-//			else
-//				S[i+j] = S2[j++];
-//		}
 		
 	}
 	
