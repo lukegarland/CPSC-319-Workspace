@@ -1,14 +1,8 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 /**
  * 			CPSC319 Assignment 2.
@@ -29,12 +23,7 @@ public class CPSC319W20A2 {
 	public static void main(String[] args)
 	{
 
-		if(args.length < 1)
-		{
-			System.err.println("No File found"); // Ensure there is at least one command line argument
-			return;
-		}
-			
+		assert(args.length > 0); // Ensure there is at least one command line argument
 		
 		String filename = args[0]; // First argument is file name
 		
@@ -42,7 +31,7 @@ public class CPSC319W20A2 {
 		
 		try 
 		{
-			fileContent = new String(Files.readAllBytes(Paths.get(filename))); // Open file and read all content
+			fileContent = new String ( Files.readAllBytes(Paths.get(filename))); // Open file and read all content
 			
 		} catch (IOException e) 
 		{
@@ -50,8 +39,7 @@ public class CPSC319W20A2 {
 			e.printStackTrace();
 			return;
 		}
-
-
+		
 		String[] listA = fileContent.split("\\s+"); // Split file content by whitespace
 		
 		mergeSort(listA); // Sort list of words
