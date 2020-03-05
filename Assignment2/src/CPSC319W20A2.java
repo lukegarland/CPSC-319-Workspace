@@ -1,8 +1,6 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  * 			CPSC319 Assignment 2.
@@ -13,89 +11,46 @@ import java.util.Arrays;
  */
 
 public class CPSC319W20A2 {
-    
-    
+	
+	
 	/**
-	 * Main program.
-	 * Lists anagrams of all words in a file.
-	 * @param args First command line argument must be a path to a readable file
+	 * Gets input stream System.in until a blank line is entered.
+	 * @return String of the input from System.in
 	 */
-	public static void main(String[] args)
+	private static String getInput()
 	{
-
-		assert(args.length > 0); // Ensure there is at least one command line argument
+		StringBuilder sb = new StringBuilder();
+		Scanner s = new Scanner(System.in);
+		String userInput;
 		
-		String filename = args[0]; // First argument is file name
-		
-		String fileContent;
-		
-		try 
+		while(s.hasNextLine())
 		{
-			fileContent = new String ( Files.readAllBytes(Paths.get(filename))); // Open file and read all content
+			userInput = s.nextLine();
 			
-		} catch (IOException e) 
-		{
-			System.err.printf("Unable to read the content from %s\n\n", filename);
-			e.printStackTrace();
-			return;
+			if(userInput.equals(""))
+				break;
+			
+			sb.append(userInput);
+			sb.append("\n");//replace \n consumed by s.nextLine()
 		}
+		s.close();
 		
-		String[] listA = fileContent.split("\\s+"); // Split file content by whitespace
-		
-		mergeSort(listA); // Sort list of words
-		
-		
-		
-		/*
-		 *  Create list B. ArrayList was used as Java does not support generic 
-		 *  array types. 
-		 * (e.g. MyLinkedList<String>[] listB = new MyLinkedList<String>[listA.length] will not compile)
-		*/
-		ArrayList <MyLinkedList<String>> listB = new ArrayList<MyLinkedList<String>>(listA.length); 
-
-
-		for(int i = 0; i < listA.length; i++)
-		{
-			String word = listA[i]; // Word to check
-			
-			
-			if(word == null) // If current word is already an anagram, skip.
-				continue;
-			
-			MyLinkedList<String> linkedListToAdd = new MyLinkedList<String>(); // Create new linked list of Strings
-			linkedListToAdd.pushFront(word);//Put word at the front
-			
-			// Check for anagrams
-			for(int j = i +1 ; j < listA.length; j++)
-			{
-				if(listA[j] == null) //Skip if entry has already been checked
-					continue;
-				
-				
-				if(isAnagram(word, listA[j]))
-				{
-					linkedListToAdd.pushBack(listA[j]); // Add entry to linked list
-					
-					listA[j] = null; // Remove entry from listA
-				}
-					
-			}
-			
-			listB.add(linkedListToAdd); // Add linked list of anagrams to list B
-			
-		}
-		
-		// Print all contents of listB
-		for(int i = 0; i<listB.size(); i++)
-		{
-			System.out.println(listB.get(i).toString());
-		}
-			
-		
-
-
+		return sb.toString();
 	}
 	
+	
+	/**
+	 * Sorts the characters in a String. 
+	 * Sorting algorithm used is insertion sort.
+	 * @param word String to sort
+	 * @return sorted characters in {@code word}
+	 */
+	private static String sortWordCharacters(String word) 
+	{
+		char [] wordChars = word.toCharArray();
+		insertionSort(wordChars);
+		return String.copyValueOf(wordChars);
+	}
 	
 	/**
 	 * Insertion sort algorithm for characters.
@@ -123,6 +78,9 @@ public class CPSC319W20A2 {
 	/**
 	 * Merge sort algorithm for Strings.
 	 * Used to sort an array of strings. Strings are sorted in lexicographical (letter case is ignored).
+	 * Source: Data Structure & Algorithms Sixth Edition by M. T. Goodrich, R. Tamassia, M. H. Goldwater. Page 537-538. 
+	 * Adaptations by: Luke Garland
+	 * 
 	 * @param S
 	 */
 	private static void mergeSort(String[] S)
@@ -149,16 +107,18 @@ public class CPSC319W20A2 {
 	/**
 	 * Helper function for {@code mergeSort}.
 	 * Merges S1 and S2 into S based on lexicographical ordering of each string. 
+	 * Source: Data Structure & Algorithms Sixth Edition by M. T. Goodrich, R. Tamassia, M. H. Goldwater. Page 537-538. 
+	 * Adaptations by: Luke Garland
 	 * @param S1 String 1
 	 * @param S2 String 2
 	 * @param S String to be overwritten
 	 */
-	private static  void merge(String[] S1, String[] S2, String[] S) 
+	private static void merge(String[] S1, String[] S2, String[] S) 
 	{
 		int i = 0, j = 0;
 		while (i+j < S.length)
 		{
-			if( j == S2.length || (i<S1.length && (S1[i].compareToIgnoreCase((S2[j])) < 0)))
+			if( j == S2.length || (i<S1.length && (S1[i].compareTo((S2[j])) < 0)))
 				S[i+j] = S1[i++];
 			else
 				S[i+j] = S2[j++];
@@ -166,30 +126,72 @@ public class CPSC319W20A2 {
 		
 	}
 	
+
 	
 	/**
-	 * Checks if two strings are anagrams of each other
-	 * @param a String 1
-	 * @param b String 2
-	 * @return true if a is an anagram of b (and vice versa)
+	 * Main program.
+	 * Lists anagrams of all words in a file.
+	 * @param args First command line argument must be a path to a readable file
 	 */
-	private static boolean isAnagram(String a, String b)
+	public static void main(String[] args)
 	{
+		String[] listA = getInput().split("\\s+"); // Split user input by whitespace
+		
+		mergeSort(listA); // Sort list of words
+		
+		/*
+		 *  Create list B. ArrayList was used as Java does not support generic 
+		 *  array types. 
+		 * (e.g. MyLinkedList<String>[] listB = new MyLinkedList<String>[listA.length] will not compile)
+		 */
+		ArrayList <MyLinkedList<String>> listB = new ArrayList<MyLinkedList<String>>(listA.length); 
 
-		// Convert to char array in order to sort.
-		char[] aSorted = a.toCharArray();
-		char[] bSorted =b.toCharArray();
+		String[] anagramCheckArray = Arrays.copyOf(listA, listA.length);
 		
-		// Sort
-		insertionSort(aSorted);
-		insertionSort(bSorted);
 
+		for(int i = 0; i < anagramCheckArray.length; i++)
+		{
+			anagramCheckArray[i] = sortWordCharacters(anagramCheckArray[i]);
+			// Sort the characters in each word, and store in anagramCheckArray so each word only needs to be sorted once.
+		}
 		
-		// Return true if aSorted is the same as bSorted
-		if(String.copyValueOf(aSorted).equalsIgnoreCase(String.copyValueOf(bSorted)))
-			return true;
-		else
-			return false;
 		
+		for(int i = 0; i < listA.length; i++)
+		{
+			String word = listA[i]; // Word to check
+			
+			if(word == null) // If current word is already an anagram, skip.
+				continue;
+			
+			MyLinkedList<String> linkedListToAdd = new MyLinkedList<String>(word); // Create new linked list of Strings, put word at the start
+			
+			String sortedWord = anagramCheckArray[i];
+			
+			for(int j = i +1 ; j < listA.length; j++) // Check for anagrams
+
+			{
+				if(listA[j] == null) //Skip if entry has already been checked
+					continue;
+
+				if(sortedWord.equals(anagramCheckArray[j])) // Check if sorted characters are the same
+				{
+					linkedListToAdd.pushBack(listA[j]); // Add entry to linked list, as they are an anagram
+					listA[j] = null; // Remove entry from listA
+				}
+			}
+			
+			listB.add(linkedListToAdd); // Add linked list of anagrams to list B
+		}
+		
+		// Print all contents of listB
+		for(MyLinkedList<String> list: listB)
+		{
+			System.out.println(list);
+		}
+		
+
+
 	}
+	
+	
 }

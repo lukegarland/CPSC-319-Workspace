@@ -1,6 +1,6 @@
 /**
  * 
- * 			Simple Linked List class with basic add, get and set functionality.
+ * 			Simple Linked List class with get, push-to-front, push-to-back, and toString functionality.
  * 
  * 			
  * 			@author lukeg
@@ -25,28 +25,38 @@ public class MyLinkedList<K extends Comparable<K>>{
 	}
 	
 	
-	/**
-	 * First node in the list
-	 */
-	private Node headNode;
-	
-	
-	/*
-	 * Tracks the current length of the list
-	 */
-	private int size;
+
+	private Node headNode;// reference to first node. 
+	private Node tailNode; // reference to last node.
+	private int size; // size of list
 	
 	/**
 	 * Default constructor creates an empty SimpleList object
 	 */
 	public MyLinkedList()
 	{
+		headNode = null;
+		tailNode = null;
+		size = 0;
+	}
+	
+	/**
+	 * Constructor to create a linked list with one item
+	 */
+	public MyLinkedList(K item)
+	{
+		Node firstNode = new Node();
+		firstNode.item = item;
+		headNode = firstNode;
+		tailNode = firstNode;
+		size = 1;
+		
 	}
 	
 	public int size() 
 	{
 		return size;
-		}
+	}
 	
 
 	/**
@@ -62,6 +72,9 @@ public class MyLinkedList<K extends Comparable<K>>{
 	        System.exit(1);
 	    }
  
+	    if(n == size - 1)
+	    	return tailNode.item;
+	    
 	    Node p = headNode;
 	    for(int i = 0; i < n; i++)
 	    {
@@ -73,25 +86,6 @@ public class MyLinkedList<K extends Comparable<K>>{
 	}
 	
 
-	/**
-	 * Set item/data v at index n.
-	 * @param n index
-	 * @param v value
-	 */
-	public void set(int n, K v)
-	{
-	    if(n < 0 || n >= size)
-	    {
-	        System.err.println("\n Illegal Access. Program Terminates...");
-	        System.exit(1);
-	    }
-	    Node p = headNode;
-	    for (int i = 0; i < n; i++)
-	    {
-	    	p = p.nextNode;
-	    }
-	    p.item = v;
-	}
 	
 	
 
@@ -104,21 +98,21 @@ public class MyLinkedList<K extends Comparable<K>>{
 		Node newNode = new Node();
 		newNode.item = item;
 
-		if(headNode == null)
+		if(headNode == null) //list is empty.
 		{
 			newNode.nextNode = headNode;
 			headNode = newNode;
+			tailNode = newNode;
 
 		}
 		else
 		{
-			Node p = headNode;
-			while (p.nextNode != null) 
-				p = p.nextNode;
-			
-			p.nextNode = newNode;
-			newNode.nextNode = null;
 
+			
+			tailNode.nextNode = newNode;
+			newNode.nextNode = null;
+			tailNode = newNode;
+			
 		}
 		size++;
 	}
@@ -130,10 +124,16 @@ public class MyLinkedList<K extends Comparable<K>>{
 	public void pushFront(K item) 
 	{
 		Node newNode = new Node();
+
 		newNode.item = item;
 		newNode.nextNode = headNode;
+
 		headNode = newNode;
 		size++;
+		
+		if(tailNode == null)
+			tailNode = newNode;
+		
 	}
 	
 
@@ -148,23 +148,11 @@ public class MyLinkedList<K extends Comparable<K>>{
 		StringBuilder sb = new StringBuilder();
 		
 	    for(int i = 0; i < this.size(); i++)
-	        sb.append(this.get(i) + "  ");
+	        sb.append(this.get(i) + " ");
 	    
 	    return sb.toString();
 	}
 	
 	
-	
-	public boolean contains(K key)
-	{
-		for(int i = 0; i < size(); i++)
-		{
-			if(get(i).compareTo(key) == 0)
-				return true;
-		}
-		
-		
-		return false;
-				
-	}
+
 }
