@@ -2,7 +2,6 @@
  * 
  * 			Simple Linked List class with get, push-to-front, push-to-back, and toString functionality.
  * 
- * 			
  * 			@author lukeg
  * 			@param <K> Type of Object to store
  * 			@since	Feb. 21, 2020

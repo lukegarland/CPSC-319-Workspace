@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /**
  * 			CPSC319 Assignment 2.
- * 			Reads a file of whitespace separated words and prints a list of all the words with their anagrams.
+ * 			Reads Ststem.in with whitespace separated words as the expected input, then prints a list of all the words with their anagrams.
  * 			@author lukeg
  * 			@since	Feb. 21, 2020
  * 
@@ -37,42 +37,6 @@ public class CPSC319W20A2 {
 		
 		return sb.toString();
 	}
-	
-	
-	/**
-	 * Sorts the characters in a String. 
-	 * Sorting algorithm used is insertion sort.
-	 * @param word String to sort
-	 * @return sorted characters in {@code word}
-	 */
-	private static String sortWordCharacters(String word) 
-	{
-		char [] wordChars = word.toCharArray();
-		insertionSort(wordChars);
-		return String.copyValueOf(wordChars);
-	}
-	
-	/**
-	 * Insertion sort algorithm for characters.
-	 * Used to sort the individual characters in a word, based on ASCII ordering.
-	 * @param a Array of chars to sort.
-	 */
-	private static void insertionSort(char[] a)
-	{
-		for(int i = 1; i < a.length; i++)
-		{
-			char t = a[i];
-			
-			int j;
-			
-			for(j = i-1; j>= 0 && a[j] > t; j--) // break if at end of array, or if current element is greater
-												 // than t
-				a[j+1] = a[j]; // Move elements greater than t one position ahead
-			
-			a[j+1] = t; // Swap t with the element that is greater than t
-		}
-	}
-	
 	
 
 	/**
@@ -126,12 +90,47 @@ public class CPSC319W20A2 {
 		
 	}
 	
-
+	
+	/**
+	 * Sorts the characters in a String. 
+	 * Sorting algorithm used is insertion sort.
+	 * @param word String to sort
+	 * @return sorted characters in {@code word}
+	 */
+	private static String sortWordCharacters(String word) 
+	{
+		char [] wordChars = word.toCharArray();
+		insertionSort(wordChars);
+		return String.copyValueOf(wordChars);
+	}
+	
+	/**
+	 * Insertion sort algorithm for characters.
+	 * Used to sort the individual characters in a word, based on ASCII ordering.
+	 * @param a Array of chars to sort.
+	 */
+	private static void insertionSort(char[] a)
+	{
+		for(int i = 1; i < a.length; i++)
+		{
+			char t = a[i];
+			
+			int j;
+			
+			for(j = i-1; j>= 0 && a[j] > t; j--) // break if at end of array, or if current element is greater
+												 // than t
+				a[j+1] = a[j]; // Move elements greater than t one position ahead
+			
+			a[j+1] = t; // Swap t with the element that is greater than t
+		}
+	}
+	
+	
 	
 	/**
 	 * Main program.
-	 * Lists anagrams of all words in a file.
-	 * @param args First command line argument must be a path to a readable file
+	 * Lists anagrams of all words (whitespace separated) read from System.in.
+	 * @param args
 	 */
 	public static void main(String[] args)
 	{
