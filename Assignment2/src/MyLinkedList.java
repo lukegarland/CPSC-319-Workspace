@@ -8,7 +8,7 @@
  * 
  */
 
-public class MyLinkedList<K extends Comparable<K>>{
+public class MyLinkedList<K>{
 
 	private class Node
 	{
@@ -148,6 +148,9 @@ public class MyLinkedList<K extends Comparable<K>>{
 		
 	    for(int i = 0; i < this.size(); i++)
 	        sb.append(this.get(i) + " ");
+	    
+	    if(sb.length() > 0)
+	    	sb.deleteCharAt(sb.length()-1); // remove last space if list is not empty
 	    
 	    return sb.toString();
 	}
