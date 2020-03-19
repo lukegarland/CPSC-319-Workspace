@@ -5,9 +5,10 @@
  * 
  */
 
-public interface TraversalMethods
+public enum TraversalMethods
 {
-	final static int IN_ORDER = 1;
-	final static int PRE_ORDER = 2;
-	final static int POST_ORDER = 3;
+
+	IN_ORDER,
+	PRE_ORDER,
+	POST_ORDER
 }

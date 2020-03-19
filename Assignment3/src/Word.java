@@ -38,16 +38,6 @@ public class Word implements Comparable<Word>{
 		this.frequency++;
 	}
 	
-	public boolean equals(String word)
-	{
-		return word.equals(this.word);
-	}
-
-	
-	public int compareTo(String o) {
-
-		return word.compareTo(o);
-	}
 
 	@Override
 	public int compareTo(Word o) {
