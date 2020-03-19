@@ -34,20 +34,19 @@ public class BinaryWordTree{
 		
 		public boolean isLeaf()
 		{
-			if(this.lessNode == null && this.greaterNode == null)
-				return true;
-			else
-				return false;
+			return (this.lessNode == null && this.greaterNode == null);
 		}
 	}
 	
 	
 	private Node root;
 	private int size;
-	private int uniqueSize;
-	
-	ArrayList<Word> mostUsed = new ArrayList<Word>();
 
+	
+	
+//	======== Constructors ========
+	
+	
 	public BinaryWordTree()
 	{
 		root = null;
@@ -59,7 +58,20 @@ public class BinaryWordTree{
 		root = new Node(obj);
 		size = 1;
 	}
+	
+	
+//	==============================
 
+	
+	/**
+	 * @return the number of nodes in the tree
+	 */
+	public int getSize() 
+	{
+		return size;
+	}
+
+	
 	
 	public void insert(Word obj)
 	{
@@ -123,14 +135,8 @@ public class BinaryWordTree{
 	
 
 	
-	/**
-	 * @return the size
-	 */
-	public int getSize() 
-	{
-		return size;
-	}
 
+	
 	
 	
 	
@@ -158,9 +164,6 @@ public class BinaryWordTree{
 		System.out.println();
 		
 	}
-	
-
-
 	/**
 	 * @param node
 	 */
@@ -211,9 +214,6 @@ public class BinaryWordTree{
 			System.out.print(node.object.toString()+ " ");
 			return;
 		}
-
-		
-		
 		if(node.lessNode != null)	
 			printPostOrder(node.lessNode);
 		
@@ -223,6 +223,14 @@ public class BinaryWordTree{
 		System.out.print((node.object.toString() + " "));
 
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	private int uniqueSizeTraverse(Node node, int uniqueSize)
@@ -253,6 +261,13 @@ public class BinaryWordTree{
 		return uniqueSizeTraverse(root, 0);
 	}
 	
+	
+	
+	
+	
+	
+	
+	
 	public int maximumDepth() {return getDepth(root);}
 	
 	private int getDepth(Node node)
@@ -269,6 +284,14 @@ public class BinaryWordTree{
 			return ++lessDepth;
 		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public void printMostUsed()
 	{
@@ -290,9 +313,10 @@ public class BinaryWordTree{
 		}
 	}
 	
+	
 	private void mostUsedTraverse(Node node, ArrayList<Word> mostUsed)
 	{
-
+		
 		if(mostUsed.get(0).getFrequency() < node.object.getFrequency())
 		{
 			mostUsed.clear();
@@ -305,13 +329,12 @@ public class BinaryWordTree{
 		if(node.lessNode != null)	
 			mostUsedTraverse(node.lessNode, mostUsed);
 
-
 		if(node.greaterNode != null)	
 			mostUsedTraverse(node.greaterNode, mostUsed);
 		
-
-		
 	}
+	
+	
 	
 	
 
@@ -319,32 +342,32 @@ public class BinaryWordTree{
 	{
 		Word word = searchTraverse(root, query);
 		if(word == null)
-			System.err.println("Word not found!");
+			System.err.println("Word not found!\n");
 		else
-			System.out.printf("Found! It appears %d times in the input text file", word.getFrequency());
+			System.out.printf("Found! It appears %d times in the input text file\n\n", word.getFrequency());
 
 	}
 
 	private Word searchTraverse(Node node, Word word)
 	{
+
+		Word rv = null; // return value placeholder, assume null in case recursive calls do not
+		
 		if(node.object.compareTo(word) == 0)
-			return node.object;
-		Word w1, w2;
-		if(node.lessNode != null)
-		{
-			w1 = searchTraverse(node.lessNode, word);
-			if (w1 != null)
-				return w1;
-		}
-
-		if(node.greaterNode != null)	
-		{
-			w2 = searchTraverse(node.greaterNode, word);
-			if (w2 != null)
-				return w2;
-		}
-
-		return null;
-
+			rv = node.object; // word is found, return the object in the node
+		
+		if(word.compareTo(node.object) < 0) // if word is less than word in the current node, then go left if it exists
+			if(node.lessNode != null)
+				rv = searchTraverse(node.lessNode, word);
+		
+		
+		if(word.compareTo(node.object) > 0) // if word is greater than word in the current node, then go right if it exists
+			if(node.greaterNode != null)
+			rv = searchTraverse(node.greaterNode, word);
+		
+		
+		return rv; 	// rv == null if recursive calls do not find the word
+					// returns the word object in the tree if found
 	}
+	
 }

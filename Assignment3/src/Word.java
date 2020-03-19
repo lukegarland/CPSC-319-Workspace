@@ -18,17 +18,6 @@ public class Word implements Comparable<Word>{
 		this.frequency = 1;
 	}
 	
-	/**
-	 * @return the word
-	 */
-	public String getWord() {
-		return word;
-	}
-	
-	
-	/**
-	 * @return the frequency
-	 */
 	public int getFrequency() {
 		return frequency;
 	}
@@ -38,7 +27,6 @@ public class Word implements Comparable<Word>{
 		this.frequency++;
 	}
 	
-
 	@Override
 	public int compareTo(Word o) {
 		return this.word.compareTo(o.word);
@@ -49,7 +37,4 @@ public class Word implements Comparable<Word>{
 	{
 		return word;
 	}
-	
-	
-	
 }
