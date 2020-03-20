@@ -1,8 +1,6 @@
 /**
- * 			TraversalMethods.java
  * 			@author lukeg
  * 			@since	Mar. 18, 2020
- * 
  */
 
 public enum TraversalMethods

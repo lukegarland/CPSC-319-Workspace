@@ -1,78 +1,40 @@
 import java.util.ArrayList;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
+
 
 /**
- * 			BinaryTree.java
+ * 			Binary search tree for Word types, with specific functionality for type Word. 
+ * 			Used to keep track of words, and the frequency of which each word occurs.
+ * 			See also: BinaryTree.java
  * 			@author lukeg
- * 			@since	Mar. 18, 2020
+ * 			@since	Mar. 19, 2020
  * 
  */
 
-public class BinaryWordTree{
-	
-	@SuppressWarnings("unused")
-	private class Node
-	{
-		Node lessNode; //left node
-		Node greaterNode; //right node
-		Word object; //object
-		
-		public Node()
-		{
-			lessNode 	= null;
-			greaterNode = null;
-			object 		= null;
-		}
-		
-		public Node(Word obj)
-		{
-			lessNode 	= null;
-			greaterNode = null;
-			object 		= obj;
-		}
-		
-		public boolean isLeaf()
-		{
-			return (this.lessNode == null && this.greaterNode == null);
-		}
-	}
-	
-	
-	private Node root;
-	private int size;
+public class BinaryWordTree extends BinaryTree<Word>{
 
-	
-	
-//	======== Constructors ========
-	
-	
+	/**
+	 * Constructor to create empty binary tree
+	 */
 	public BinaryWordTree()
 	{
-		root = null;
-		size = 0;
+		super();
 	}
-
-	public BinaryWordTree(Word obj)
-	{
-		root = new Node(obj);
-		size = 1;
-	}
-	
-	
-//	==============================
-
 	
 	/**
-	 * @return the number of nodes in the tree
+	 * Constructor to create binary tree with initial word
 	 */
-	public int getSize() 
+	public BinaryWordTree(Word obj)
 	{
-		return size;
+		super(obj);
 	}
 
-	
-	
+	/**
+	 * Insert word into tree.
+	 * Based on the natural (obj.compareTo(o)) ordering of the object. 
+	 * Overrides BinaryTree's insert(T obj), as if word is already in the tree, the word's frequency must be updated.
+	 */
+	@Override
 	public void insert(Word obj)
 	{
 		Node nodeToAdd = new Node(obj);
@@ -129,110 +91,24 @@ public class BinaryWordTree{
 	
 			}
 		}
-		
-		
-	}
-	
-
-	
-
-	
-	
-	
-	
-	public void print(TraversalMethods method)
-	{
-		//StringBuilder sb = new StringBuilder();
-		
-		switch(method)
-		{
-			case IN_ORDER:
-				System.out.print("IN-ORDER output: ");
-				printInOrder(root);
-				break;
-
-			case PRE_ORDER:
-				System.out.print("PRE-ORDER output: ");
-				printPreOrder(root);
-				break;
-				
-			case POST_ORDER:
-				System.out.print("POST-ORDER output: ");
-				printPostOrder(root);
-				break;
-		}
-		System.out.println();
-		
-	}
-	/**
-	 * @param node
-	 */
-	private void printInOrder(Node node) 
-	{
-		if(node.isLeaf())
-		{	
-			System.out.print(node.object.toString()+ " ");
-			return;
-		}
-		
-		if(node.lessNode != null)	
-			printInOrder(node.lessNode);
-		
-		System.out.print((node.object.toString() + " "));
-		if(node.greaterNode != null)	
-			printInOrder(node.greaterNode);
-	}
-
-	/**
-	 * @param root
-	 */
-	private void printPreOrder(Node node) 
-	{
-		if(node.isLeaf())
-		{	
-			System.out.print(node.object.toString()+ " ");
-			return;
-		}
-
-		
-		System.out.print((node.object.toString() + " "));
-		
-		if(node.lessNode != null)	
-			printPreOrder(node.lessNode);
-		
-		if(node.greaterNode != null)	
-			printPreOrder(node.greaterNode);
 	}
 	
 	/**
-	 * @param node
+	 * @return number of unique words (frequency == 1) in the tree
 	 */
-	private void printPostOrder(Node node)
+	public int getUniqueSize()
 	{
-		if(node.isLeaf())
-		{	
-			System.out.print(node.object.toString()+ " ");
-			return;
-		}
-		if(node.lessNode != null)	
-			printPostOrder(node.lessNode);
-		
-		if(node.greaterNode != null)	
-			printPostOrder(node.greaterNode);
-		
-		System.out.print((node.object.toString() + " "));
-
+		return uniqueSizeTraverse(root, 0);
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * Helper method for traversing tree when calling getUniqueSize()
+	 * Uses pre-order traversal.
+	 * @param node current node in the traversal
+	 * @param uniqueSize current unique size
+	 * @return updated unique size after checking the current node, and it's children
+	 */
 	private int uniqueSizeTraverse(Node node, int uniqueSize)
 	{
 		if(node.isLeaf())
@@ -256,43 +132,13 @@ public class BinaryWordTree{
 		return uniqueSize;
 	}
 
-	public int getUniqueSize()
-	{
-		return uniqueSizeTraverse(root, 0);
-	}
+
 	
+
 	
-	
-	
-	
-	
-	
-	
-	public int maximumDepth() {return getDepth(root);}
-	
-	private int getDepth(Node node)
-	{
-		if(node == null)
-			return 0;
-		
-		int lessDepth = getDepth(node.lessNode);
-		int greaterDepth = getDepth(node.greaterNode);
-		
-		if (lessDepth < greaterDepth)
-			return ++greaterDepth;
-		else 
-			return ++lessDepth;
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * Prints the word(s) that appear most often, and their frequency.
+	 */
 	public void printMostUsed()
 	{
 		ArrayList<Word> mostUsed = new ArrayList<Word>();
@@ -314,6 +160,12 @@ public class BinaryWordTree{
 	}
 	
 	
+	/**
+	 * Helper function for traversing tree when calling printMostUsed()
+	 * Uses pre-order traversal.
+	 * @param node current node in the traversal
+	 * @param mostUsed current word(s) that have highest frequency
+	 */
 	private void mostUsedTraverse(Node node, ArrayList<Word> mostUsed)
 	{
 		
@@ -333,14 +185,16 @@ public class BinaryWordTree{
 			mostUsedTraverse(node.greaterNode, mostUsed);
 		
 	}
-	
-	
-	
-	
 
+	
+	/**
+	 * Search for a word and print the result.
+	 * If word is found, method will print the word's frequency. If the word is not found, it will notify the user accordingly.
+	 * @param query word to search
+	 */
 	public void search(Word query)
 	{
-		Word word = searchTraverse(root, query);
+		Word word = binarySearch(query);
 		if(word == null)
 			System.err.println("Word not found!\n");
 		else
@@ -348,26 +202,5 @@ public class BinaryWordTree{
 
 	}
 
-	private Word searchTraverse(Node node, Word word)
-	{
-
-		Word rv = null; // return value placeholder, assume null in case recursive calls do not
-		
-		if(node.object.compareTo(word) == 0)
-			rv = node.object; // word is found, return the object in the node
-		
-		if(word.compareTo(node.object) < 0) // if word is less than word in the current node, then go left if it exists
-			if(node.lessNode != null)
-				rv = searchTraverse(node.lessNode, word);
-		
-		
-		if(word.compareTo(node.object) > 0) // if word is greater than word in the current node, then go right if it exists
-			if(node.greaterNode != null)
-			rv = searchTraverse(node.greaterNode, word);
-		
-		
-		return rv; 	// rv == null if recursive calls do not find the word
-					// returns the word object in the tree if found
-	}
 	
 }
