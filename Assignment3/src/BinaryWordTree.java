@@ -31,66 +31,17 @@ public class BinaryWordTree extends BinaryTree<Word>{
 
 	/**
 	 * Insert word into tree.
-	 * Based on the natural (obj.compareTo(o)) ordering of the object. 
-	 * Overrides BinaryTree's insert(T obj), as if a word is already in the tree, the word's frequency must be incremented.
+	 * Overrides BinaryTree's insert(T obj), because if a word is already in the tree, the word's frequency must be incremented.
 	 */
 	@Override
 	public void insert(Word obj)
 	{
-		Node nodeToAdd = new Node(obj);
+		Word result = super.binarySearch(root, obj);
 		
-		if(size == 0)
-		{
-			root = nodeToAdd;
-			size++;
-			return;
-		}
-		
-		Node currentNode = root;
-		
-		while(true)// Avoid recursion. There is no need to go back up the tree once item is placed.
-		{
-			if(currentNode.object.compareTo(nodeToAdd.object) == 0)
-			{
-				currentNode.object.increment();// If word is already in the tree, increment the frequency of the word
-				return;
-			}
-			
-			if(currentNode.object.compareTo(nodeToAdd.object) > 0)
-			//if nodeToAdd is less than currentNode, go left
-			{
-				// Check if left is empty
-				if(currentNode.lessNode == null)
-				{
-					currentNode.lessNode = nodeToAdd;
-					size++;
-					break;
-				}
-				else
-				{
-					currentNode = currentNode.lessNode;
-					continue;
-				}
-
-			}
-
-			else if (currentNode.object.compareTo(nodeToAdd.object) < 0)
-			//if nodeToAdd is greater than currentNode, go right
-			{
-				if(currentNode.greaterNode == null)
-				{
-					currentNode.greaterNode = nodeToAdd;
-					size++;
-					break;
-				}
-				else 
-				{
-					currentNode = currentNode.greaterNode;
-					continue;					
-				}
-	
-			}
-		}
+		if(result != null)
+			result.increment(); // Increment frequency if word is already in the tree.
+		else
+			super.insert(obj);
 	}
 	
 	/**
@@ -194,7 +145,7 @@ public class BinaryWordTree extends BinaryTree<Word>{
 	 */
 	public void search(Word query)
 	{
-		Word word = binarySearch(query);
+		Word word = binarySearch(root, query);
 		if(word == null)
 			System.err.println("Word not found!\n");
 		else
@@ -202,5 +153,4 @@ public class BinaryWordTree extends BinaryTree<Word>{
 
 	}
 
-	
 }

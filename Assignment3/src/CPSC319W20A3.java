@@ -25,7 +25,8 @@ public class CPSC319W20A3{
 	 */
 	public static void main(String[] args)
 	{
-
+		
+		
 		String[] words = importFromFile();
 
 		BinaryWordTree tree = new BinaryWordTree();
@@ -80,9 +81,8 @@ public class CPSC319W20A3{
 				System.out.println();			
 				String lines;
 				lines = new String(Files.readAllBytes(Paths.get(filename))); // Read everything in the file.
-				words = lines.replaceAll("[^a-zA-Z ]", " ").toLowerCase().split("\\s+"); //Replaced all non letter characters with a space, then slpit by whitespace.
+				words = lines.replaceAll("[^a-zA-Z ]", " ").toLowerCase().split("\\s+"); //Replaced all non letter characters with a space, then split by whitespace.
 				return words;
-				
 			}		
 			catch (NoSuchFileException e)
 			{

@@ -89,6 +89,7 @@ public class BinaryTree <T extends Comparable<T>>{
 		{
 			if(currentNode.object.compareTo(nodeToAdd.object) == 0)
 			{
+
 				return;
 			}
 			
@@ -276,6 +277,9 @@ public class BinaryTree <T extends Comparable<T>>{
 	protected T binarySearch(Node node, T query)
 	{
 
+		if(node == null) // if node/tree is empty
+			return null;
+		
 		T rv = null; // return value placeholder, assume null in case recursive calls do not
 		
 		if(node.object.compareTo(query) == 0)
@@ -294,6 +298,8 @@ public class BinaryTree <T extends Comparable<T>>{
 		return rv; 	// rv == null if recursive calls do not find the word
 					// returns the word object in the tree if found
 	}
+	
+
 	
 	
 }
