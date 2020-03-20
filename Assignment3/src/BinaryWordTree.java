@@ -32,7 +32,7 @@ public class BinaryWordTree extends BinaryTree<Word>{
 	/**
 	 * Insert word into tree.
 	 * Based on the natural (obj.compareTo(o)) ordering of the object. 
-	 * Overrides BinaryTree's insert(T obj), as if word is already in the tree, the word's frequency must be updated.
+	 * Overrides BinaryTree's insert(T obj), as if a word is already in the tree, the word's frequency must be incremented.
 	 */
 	@Override
 	public void insert(Word obj)
@@ -48,11 +48,11 @@ public class BinaryWordTree extends BinaryTree<Word>{
 		
 		Node currentNode = root;
 		
-		while(true)
+		while(true)// Avoid recursion. There is no need to go back up the tree once item is placed.
 		{
 			if(currentNode.object.compareTo(nodeToAdd.object) == 0)
 			{
-				currentNode.object.increment();
+				currentNode.object.increment();// If word is already in the tree, increment the frequency of the word
 				return;
 			}
 			
