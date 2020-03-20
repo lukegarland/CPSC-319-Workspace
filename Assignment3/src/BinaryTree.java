@@ -28,10 +28,6 @@ public class BinaryTree <T extends Comparable<T>>{
 			object 		= obj;
 		}
 		
-		public boolean isLeaf()
-		{
-			return (this.lessNode == null && this.greaterNode == null);
-		}
 	}
 	
 	
@@ -85,11 +81,10 @@ public class BinaryTree <T extends Comparable<T>>{
 		
 		Node currentNode = root;
 		
-		while(true) // Avoid recursion. There is no need to go back up the tree once item is placed.
+		while(true) // Avoid recursion, because there is no need to go back up the tree once item is placed.
 		{
 			if(currentNode.object.compareTo(nodeToAdd.object) == 0)
 			{
-
 				return;
 			}
 			
@@ -127,21 +122,26 @@ public class BinaryTree <T extends Comparable<T>>{
 				}
 	
 			}
+			
 		}// end while(true)
 	}
 	
 
 	
-
-	
-	
-	
 	/**
 	 * Prints a traversal of the tree using specified method
 	 * @param method Traversal method (in-order, pre-order, or post-order)
+	 * 
 	 */
 	public void print(TraversalMethods method)
 	{
+		if(size == 0)
+		{
+			System.out.println("Tree is empty");
+			System.out.println();
+
+			return;
+		}
 		
 		switch(method)
 		{
@@ -171,16 +171,12 @@ public class BinaryTree <T extends Comparable<T>>{
 	 */
 	private void printInOrder(Node node) 
 	{
-		if(node.isLeaf())
-		{	
-			System.out.print(node.object.toString()+ " ");
-			return;
-		}
-		
+
 		if(node.lessNode != null)	
 			printInOrder(node.lessNode);
 		
 		System.out.print((node.object.toString() + " "));
+		
 		if(node.greaterNode != null)	
 			printInOrder(node.greaterNode);
 	}
@@ -192,13 +188,7 @@ public class BinaryTree <T extends Comparable<T>>{
 	 */
 	private void printPreOrder(Node node) 
 	{
-		if(node.isLeaf())
-		{	
-			System.out.print(node.object.toString()+ " ");
-			return;
-		}
 
-		
 		System.out.print((node.object.toString() + " "));
 		
 		if(node.lessNode != null)	
@@ -215,11 +205,7 @@ public class BinaryTree <T extends Comparable<T>>{
 	 */
 	private void printPostOrder(Node node)
 	{
-		if(node.isLeaf())
-		{	
-			System.out.print(node.object.toString()+ " ");
-			return;
-		}
+
 		if(node.lessNode != null)	
 			printPostOrder(node.lessNode);
 		

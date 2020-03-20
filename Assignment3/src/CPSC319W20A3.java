@@ -28,7 +28,6 @@ public class CPSC319W20A3{
 		
 		
 		String[] words = importFromFile();
-
 		BinaryWordTree tree = new BinaryWordTree();
 
 		for(int i = 0; i < words.length; i++)

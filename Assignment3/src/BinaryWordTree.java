@@ -39,7 +39,7 @@ public class BinaryWordTree extends BinaryTree<Word>{
 		Word result = super.binarySearch(root, obj);
 		
 		if(result != null)
-			result.increment(); // Increment frequency if word is already in the tree.
+			result.increment(); // Increment frequency of the word in the tree
 		else
 			super.insert(obj);
 	}
@@ -62,13 +62,6 @@ public class BinaryWordTree extends BinaryTree<Word>{
 	 */
 	private int uniqueSizeTraverse(Node node, int uniqueSize)
 	{
-		if(node.isLeaf())
-		{	
-			if (node.object.getFrequency() == 1)
-				uniqueSize++;
-			return uniqueSize;
-		}
-		
 		
 		if (node.object.getFrequency() == 1)
 			uniqueSize++;
