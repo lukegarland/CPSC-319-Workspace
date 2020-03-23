@@ -28,12 +28,12 @@ public class CPSC319W20A3{
 		
 		
 		String[] words = importFromFile();
-		BinaryWordTree tree = new BinaryWordTree();
+		BinaryTree<String> tree = new BinaryTree<String>();
 
 		for(int i = 0; i < words.length; i++)
 		{
-			Word word = new Word(words[i]); // Fill tree with words
-			tree.insert(word);
+			// Fill tree with words
+			tree.insert(words[i]);
 		}
 
 		printTreeData(tree);
@@ -101,7 +101,7 @@ public class CPSC319W20A3{
 	 * This method will ask the user which BST traversal method they would like. Options are pre-order, in-order, or post-order.
 	 * @param tree Tree to traverse
 	 */
-	public static void traverseTree(BinaryWordTree tree)
+	public static void traverseTree(BinaryTree<String> tree)
 	{ 
 		int input;
 
@@ -124,10 +124,10 @@ public class CPSC319W20A3{
 	 * Search for a word in a tree and print the result.
 	 * @param tree Tree to search
 	 */
-	public static void search(BinaryWordTree tree)
+	public static void search(BinaryTree<String> tree)
 	{
 		System.out.printf("Enter the word you are looking for in %s ? ", filename);
-		Word query = new Word(scan.nextLine());
+		String query = scan.nextLine();
 		tree.search(query);
 	}
 	
@@ -140,7 +140,7 @@ public class CPSC319W20A3{
 	 * - Tree depth.
 	 * @param tree 
 	 */
-	public static void printTreeData(BinaryWordTree tree)
+	public static void printTreeData(BinaryTree<String> tree)
 	{
 		System.out.printf("Total words in %s = %d\n\n", filename, tree.getSize());
 		System.out.printf("Number of unique words in %s = %d\n\n", filename, tree.getUniqueSize());
