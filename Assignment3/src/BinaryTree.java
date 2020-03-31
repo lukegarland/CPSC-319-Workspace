@@ -254,9 +254,9 @@ public class BinaryTree <T extends Comparable<T>>{
 	{
 		Node word = binarySearch(root, query);
 		if(word == null)
-			System.err.println("Word not found!\n");
+			System.out.println("Word not found!");
 		else
-			System.out.printf("Found! It appears %d times in the input text file\n\n", word.frequency);
+			System.out.printf("Found! It appears %d times in the input text file\n", word.frequency);
 
 	}
 
